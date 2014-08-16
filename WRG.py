@@ -4,7 +4,6 @@ username = ""
 password = ""
 target   = ""
 email    = ""
-datfile  = ""
 
 import cPickle as pickle
 import os
@@ -14,11 +13,14 @@ import whatapi
 
 class WhatRequestGrab(object):
 
+    SCRIPT_DIR  = os.path.dirname(os.path.realpath(sys.argv[0]))
+    STATE_FILE  = os.path.join(SCRIPT_DIR, 'wrg.dat')
+
     timeformat = "%Y-%m-%d %H:%M:%S"
 
-    def __init__(self, state_file):
+    def __init__(self, state_file=None):
 
-        self.state_file = state_file
+        self.state_file  = state_file or WhatRequestGrab.STATE_FILE
 
         self.first_run = False
         try:
@@ -87,4 +89,4 @@ class WhatRequestGrab(object):
             self.state['last_filled'] = request['timeFilled']
             self.save_state()
 
-WhatRequestGrab(state_file = datfile).run()
+WhatRequestGrab().run()
