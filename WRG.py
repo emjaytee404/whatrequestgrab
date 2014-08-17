@@ -1,7 +1,5 @@
 #!/usr/bin/env python2
 
-username = ""
-password = ""
 target   = ""
 email    = ""
 
@@ -14,13 +12,19 @@ import whatapi
 class WhatRequestGrab(object):
 
     SCRIPT_DIR  = os.path.dirname(os.path.realpath(sys.argv[0]))
+    CONFIG_FILE = os.path.join(SCRIPT_DIR, 'wfg.cfg')
     STATE_FILE  = os.path.join(SCRIPT_DIR, 'wrg.dat')
 
     timeformat = "%Y-%m-%d %H:%M:%S"
 
-    def __init__(self, state_file=None):
+    def __init__(self, config_file=None, state_file=None):
 
+        self.config_file = config_file or WhatRequestGrab.CONFIG_FILE
         self.state_file  = state_file or WhatRequestGrab.STATE_FILE
+
+        self.config = ConfigParser.RawConfigParser()
+
+        self.config.read(self.config_file)
 
         self.first_run = False
         try:
@@ -33,7 +37,7 @@ class WhatRequestGrab(object):
         self.last_filled = time.strptime(self.last_filled, WhatRequestGrab.timeformat)
 
         cookies = self.state.get('cookies')
-        self.what = whatapi.WhatAPI(username=username, password=password, cookies=cookies)
+        self.what = whatapi.WhatAPI(config_file=self.config_file, cookies=cookies)
         self.state['cookies'] = self.what.session.cookies
         self.save_state()
 
