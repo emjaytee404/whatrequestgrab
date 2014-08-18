@@ -1,8 +1,5 @@
 #!/usr/bin/env python2
 
-target   = ""
-email    = ""
-
 import cPickle as pickle
 import os
 import subprocess
@@ -25,6 +22,9 @@ class WhatRequestGrab(object):
         self.config = ConfigParser.RawConfigParser()
 
         self.config.read(self.config_file)
+
+        self.target   = self.config.get('download', 'target')
+        self.email_to = self.config.get('email', 'email_to')
 
         self.first_run = False
         try:
@@ -85,10 +85,10 @@ class WhatRequestGrab(object):
                 message = "Request Filled: %s - %s [%s]" % (request['artists'][0][0]['name'], request['title'], request['formatList'])
             else:
                 message = "Request Filled: %s" % (request['title'])
-            subprocess.Popen(["mailx", email], cwd=home_dir, stdin=subprocess.PIPE).communicate(message.encode("utf-8"))
+            subprocess.Popen(["mailx", self.email_to], cwd=home_dir, stdin=subprocess.PIPE).communicate(message.encode("utf-8"))
 
             torrent_url = base_url % (request['torrentId'], self.what.authkey, self.what.passkey)
-            subprocess.Popen(["wget", "--quiet", "--content-disposition", torrent_url], cwd=target)
+            subprocess.Popen(["wget", "--quiet", "--content-disposition", torrent_url], cwd=self.target)
 
             self.state['last_filled'] = request['timeFilled']
             self.save_state()
