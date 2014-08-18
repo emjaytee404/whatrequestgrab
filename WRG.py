@@ -11,7 +11,7 @@ import whatapi
 class WhatRequestGrab(object):
 
     SCRIPT_DIR  = os.path.dirname(os.path.realpath(sys.argv[0]))
-    CONFIG_FILE = os.path.join(SCRIPT_DIR, 'wfg.cfg')
+    CONFIG_FILE = os.path.join(SCRIPT_DIR, 'wrg.cfg')
     STATE_FILE  = os.path.join(SCRIPT_DIR, 'wrg.dat')
 
     timeformat = "%Y-%m-%d %H:%M:%S"
