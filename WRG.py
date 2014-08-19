@@ -70,7 +70,7 @@ class WhatRequestGrab(object):
                 page += 1
 
     def save_state(self):
-        pickle.dump(self.state, open(datfile, 'wb'))
+        pickle.dump(self.state, open(self.state_file, 'wb'))
 
     def send_notifications(self):
         if self.first_run:
